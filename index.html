@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Krootilka Editor v 0.0.1 beta</title>
+	<link rel="icon" type="image/png" href="/fav.png">
+	<link rel="stylesheet" href="/style.css">
+	<link rel="stylesheet" href="/fonts/fontello/css/fontello-embedded.css">
+	<!-- <script src="/jquery.js"></script> -->
+	
+<style>
+
+.active{color:green}
+</style>
+
+<script type="module">
+
+import { createApp } from '/vue_esm.js';
+import App from '/app.mjs';
+
+window.onload = async ()=>{
+
+
+const app = createApp(App)
+app.mount('#app')
+
+// {
+//     data(){return{
+//         last_updated:0,
+//         qqq:111
+//     }},
+//     computed:{
+//         lastupd(){
+//             return this.qqq;
+//         }
+//     },
+//     methods:{
+//         upd(){
+//             this.last_updated = Date.now();
+//         }
+//     }
+
+// }
+
+
+}
+
+
+
+</script>
+</head>
+<body oncontextmenu="return false;">
+<div id="app">
+
+</div>
+</body>
+</html>

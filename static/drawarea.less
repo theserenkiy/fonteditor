@@ -1,0 +1,51 @@
+//main: "./style.less"
+
+.display{
+    display: flex;
+
+    .col{
+        display: flex;
+        flex-direction: column;
+        //border: 1px solid red;
+    }
+}
+
+.drawarea{
+
+    overflow: hidden;
+    display: flex;
+    //flex-wrap: wrap;
+    align-content: flex-start;
+    flex-direction: column;
+
+
+    .row{
+        display: flex;
+
+        .pixel{
+            //border: 1px solid #aaa;
+            background-color: transparent;
+            position: relative;
+            width: 12px;
+            height: 12px;
+            padding:1px;
+            &::after{
+                content: "";
+                display: block;
+                width: 95%;
+                height: 95%;
+                border-radius: 25%;
+                //border: 1px solid red;
+                background-color: #333;
+                transition: background-color 150ms,box-shadow 150ms;
+            }
+        }
+        .pixel.active{
+            &::after{
+                background-color: #f30;
+                box-shadow: 0 0 10px #f00;//,0 0 10px #f00;//,0 0 10px #f00;
+            }
+        }
+    }
+    
+}

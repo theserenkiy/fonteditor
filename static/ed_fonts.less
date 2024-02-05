@@ -1,0 +1,184 @@
+// main: "./style.less"
+
+.ed_fonts{
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	justify-content: space-between;
+	//border: 1px solid blue;
+	overflow: auto;
+	min-height: 0;
+	.controls{
+		display: flex;
+		flex: 0 0 auto;
+		padding: 10px;
+		&>*{
+			margin-right: 10px;
+			display: flex;
+			align-items: center;
+		}
+
+		h2{
+			margin:0 20px 0 0;
+		}
+		input{
+			border: 1px solid #555;
+			background-color: #222;
+			color: #eee;
+			padding:5px;
+		}
+		button{
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width:40px;
+			height:40px;
+			border-radius: 5px;
+			background-color: #222;
+			padding: 5px;
+			color: #fff;
+			cursor: pointer;
+			//border-color: transparent;
+			border: 1px solid #555;
+			font-size: 20px;
+		}
+		.active{
+			background-color: #533;
+			border-color: #fff;
+		}
+	}
+
+	.glyphs_wrap{
+		flex: 0 1 auto;
+		//border: 1px solid red;
+		//overflow-y: auto;
+		//min-height: 500px;
+		//border: 1px solid red
+		.glyphs{
+			display: flex;
+			flex-wrap: wrap;
+			
+			.glyph{
+				min-width: 120px;
+				background-color: #222;
+				color: #aaa;
+				margin: 5px;
+				padding: 5px;
+				display: flex;
+				flex-direction: column;
+				align-items: stretch;
+	
+				.main{
+					display: flex;
+					align-items: stretch;
+					//justify-content: space-between;
+	
+					.draw{
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						flex-grow: 1;
+					}
+					.rpanel{
+						width: 20px;
+						background-color: #222;
+	
+						button{
+							background-color: transparent;
+							border:0;
+							color: #555;
+							width: 100%;
+							padding:0;
+							font-size: 16px;
+							cursor: pointer;
+							transition: 200ms;
+							padding: 2px 0;
+							border-radius: 2px;
+	
+							&:hover{
+								background-color: fade(#aaa,10);
+								color: #777;
+							}
+						}
+					}
+				}
+	
+				.controls{
+					padding-top: 7px;
+					display: flex;
+					justify-content: space-between;
+					flex: 0 1 auto;
+					input{
+						background-color: fade(#fff,10);
+						color: #eee;
+						flex:1;
+						width: 10px;
+						font-size: 20px;
+						border: 0;
+						border-radius: 5px;
+						padding: 2px;
+						text-align: center;
+						font-weight: bold;
+						&::placeholder{
+							font-size: 16px;
+							font-weight: normal;
+						}
+					}
+				}
+	
+				&.addnew{
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					padding-bottom: 30px;
+					opacity: 0.8;
+					cursor: pointer;
+					&::after{
+						content: '+';
+						font-size: 80px;
+						color: #555;
+					}
+	
+					&:hover{
+						opacity: 1;
+					}
+				}
+			}
+		}
+	}
+	
+
+	.symlist{
+		background-color: #333;
+		padding: 5px;
+		margin: 10px;
+		border-radius: 4px;
+		.symclass{
+			display: flex;
+			align-items: center;
+			.caption{
+				width: 8em;
+				text-align: right;
+				color: #aaa;
+			}
+			.list{
+				margin-left: 10px;
+				span{
+					display: inline-block;
+					//width: 16px;
+					padding: 2px;
+					margin: 1px;
+					color: #656565;
+					text-align: center;
+					font-weight: bold;
+
+					&.active{
+						color: #0f0;
+						font-weight: bold;
+					}
+				}
+			}
+			
+		}
+	}
+}

@@ -1,0 +1,102 @@
+// out: "./style.css"
+
+html,body{min-height: 100vh;}
+body{
+    background: url(/bg2.jpg);
+    margin:0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    color:#fff;
+}
+*{
+    user-select: none;
+    box-sizing: border-box;
+}
+#app,#app>div{  
+    width: 100%;
+    min-height: 100%;
+}
+
+#app>div{
+    display: flex;
+    align-items: stretch;
+
+    .lpanel{
+        width: 200px;
+        flex: 0 0 auto;
+        border-right: 1px solid #700;
+        background-color: #111;
+
+        h3{
+            font-size: 16px;
+            cursor: pointer;
+            padding-left: 22px;
+            margin: 5px 0 10px 0;
+        }
+        h3.foldable{
+            padding-left: 0;
+            span{
+                display: inline-block;
+                &::before{
+                    transition: transform 100ms;
+                }
+            }
+            &.closed span::before{
+                transform: rotate(-90deg);
+            }
+        }
+
+        ul{
+            margin: 0 0 0 30px;
+            padding:0 0 10px 0;
+            li{
+                list-style-type: none;
+                cursor: pointer;
+                margin: 4px 0;
+                color: #aaa;
+
+                &:hover{
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+
+    .editor{
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        //justify-content: space-between;
+        height: 100vh; 
+        max-height: 100vh; 
+        flex: 0 1 auto;
+        .tabs{
+            display: flex;
+            height: 30px;
+            flex: 0 0 auto;
+            .tab{
+                padding: 5px;
+                margin: 0 3px;
+                background-color: fade(#fff,10);
+            }
+        }
+        .editor_window{
+            flex: 0 1 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: space-between;
+            overflow: auto;
+            &>*{
+                flex: 0 1 auto;
+                //flex-grow:1;
+            }
+        }
+    }
+}
+
+@import "drawarea.less";
+@import "ed_fonts.less";
+//@import "ed_clips.less";

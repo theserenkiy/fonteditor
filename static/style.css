@@ -1,0 +1,288 @@
+html,
+body {
+  min-height: 100vh;
+}
+body {
+  background: url(/bg2.jpg);
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  color: #fff;
+}
+* {
+  user-select: none;
+  box-sizing: border-box;
+}
+#app,
+#app > div {
+  width: 100%;
+  min-height: 100%;
+}
+#app > div {
+  display: flex;
+  align-items: stretch;
+}
+#app > div .lpanel {
+  width: 200px;
+  flex: 0 0 auto;
+  border-right: 1px solid #700;
+  background-color: #111;
+}
+#app > div .lpanel h3 {
+  font-size: 16px;
+  cursor: pointer;
+  padding-left: 22px;
+  margin: 5px 0 10px 0;
+}
+#app > div .lpanel h3.foldable {
+  padding-left: 0;
+}
+#app > div .lpanel h3.foldable span {
+  display: inline-block;
+}
+#app > div .lpanel h3.foldable span::before {
+  transition: transform 100ms;
+}
+#app > div .lpanel h3.foldable.closed span::before {
+  transform: rotate(-90deg);
+}
+#app > div .lpanel ul {
+  margin: 0 0 0 30px;
+  padding: 0 0 10px 0;
+}
+#app > div .lpanel ul li {
+  list-style-type: none;
+  cursor: pointer;
+  margin: 4px 0;
+  color: #aaa;
+}
+#app > div .lpanel ul li:hover {
+  text-decoration: underline;
+}
+#app > div .editor {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  height: 100vh;
+  max-height: 100vh;
+  flex: 0 1 auto;
+}
+#app > div .editor .tabs {
+  display: flex;
+  height: 30px;
+  flex: 0 0 auto;
+}
+#app > div .editor .tabs .tab {
+  padding: 5px;
+  margin: 0 3px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+#app > div .editor .editor_window {
+  flex: 0 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+  overflow: auto;
+}
+#app > div .editor .editor_window > * {
+  flex: 0 1 auto;
+}
+.display {
+  display: flex;
+}
+.display .col {
+  display: flex;
+  flex-direction: column;
+}
+.drawarea {
+  overflow: hidden;
+  display: flex;
+  align-content: flex-start;
+  flex-direction: column;
+}
+.drawarea .row {
+  display: flex;
+}
+.drawarea .row .pixel {
+  background-color: transparent;
+  position: relative;
+  width: 12px;
+  height: 12px;
+  padding: 1px;
+}
+.drawarea .row .pixel::after {
+  content: "";
+  display: block;
+  width: 95%;
+  height: 95%;
+  border-radius: 25%;
+  background-color: #333;
+  transition: background-color 150ms, box-shadow 150ms;
+}
+.drawarea .row .pixel.active::after {
+  background-color: #f30;
+  box-shadow: 0 0 10px #f00;
+}
+.ed_fonts {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+  overflow: auto;
+  min-height: 0;
+}
+.ed_fonts .controls {
+  display: flex;
+  flex: 0 0 auto;
+  padding: 10px;
+}
+.ed_fonts .controls > * {
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+}
+.ed_fonts .controls h2 {
+  margin: 0 20px 0 0;
+}
+.ed_fonts .controls input {
+  border: 1px solid #555;
+  background-color: #222;
+  color: #eee;
+  padding: 5px;
+}
+.ed_fonts .controls button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  background-color: #222;
+  padding: 5px;
+  color: #fff;
+  cursor: pointer;
+  border: 1px solid #555;
+  font-size: 20px;
+}
+.ed_fonts .controls .active {
+  background-color: #533;
+  border-color: #fff;
+}
+.ed_fonts .glyphs_wrap {
+  flex: 0 1 auto;
+}
+.ed_fonts .glyphs_wrap .glyphs {
+  display: flex;
+  flex-wrap: wrap;
+}
+.ed_fonts .glyphs_wrap .glyphs .glyph {
+  min-width: 120px;
+  background-color: #222;
+  color: #aaa;
+  margin: 5px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.ed_fonts .glyphs_wrap .glyphs .glyph .main {
+  display: flex;
+  align-items: stretch;
+}
+.ed_fonts .glyphs_wrap .glyphs .glyph .main .draw {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+}
+.ed_fonts .glyphs_wrap .glyphs .glyph .main .rpanel {
+  width: 20px;
+  background-color: #222;
+}
+.ed_fonts .glyphs_wrap .glyphs .glyph .main .rpanel button {
+  background-color: transparent;
+  border: 0;
+  color: #555;
+  width: 100%;
+  padding: 0;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 200ms;
+  padding: 2px 0;
+  border-radius: 2px;
+}
+.ed_fonts .glyphs_wrap .glyphs .glyph .main .rpanel button:hover {
+  background-color: rgba(170, 170, 170, 0.1);
+  color: #777;
+}
+.ed_fonts .glyphs_wrap .glyphs .glyph .controls {
+  padding-top: 7px;
+  display: flex;
+  justify-content: space-between;
+  flex: 0 1 auto;
+}
+.ed_fonts .glyphs_wrap .glyphs .glyph .controls input {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #eee;
+  flex: 1;
+  width: 10px;
+  font-size: 20px;
+  border: 0;
+  border-radius: 5px;
+  padding: 2px;
+  text-align: center;
+  font-weight: bold;
+}
+.ed_fonts .glyphs_wrap .glyphs .glyph .controls input::placeholder {
+  font-size: 16px;
+  font-weight: normal;
+}
+.ed_fonts .glyphs_wrap .glyphs .glyph.addnew {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 30px;
+  opacity: 0.8;
+  cursor: pointer;
+}
+.ed_fonts .glyphs_wrap .glyphs .glyph.addnew::after {
+  content: '+';
+  font-size: 80px;
+  color: #555;
+}
+.ed_fonts .glyphs_wrap .glyphs .glyph.addnew:hover {
+  opacity: 1;
+}
+.ed_fonts .symlist {
+  background-color: #333;
+  padding: 5px;
+  margin: 10px;
+  border-radius: 4px;
+}
+.ed_fonts .symlist .symclass {
+  display: flex;
+  align-items: center;
+}
+.ed_fonts .symlist .symclass .caption {
+  width: 8em;
+  text-align: right;
+  color: #aaa;
+}
+.ed_fonts .symlist .symclass .list {
+  margin-left: 10px;
+}
+.ed_fonts .symlist .symclass .list span {
+  display: inline-block;
+  padding: 2px;
+  margin: 1px;
+  color: #656565;
+  text-align: center;
+  font-weight: bold;
+}
+.ed_fonts .symlist .symclass .list span.active {
+  color: #0f0;
+  font-weight: bold;
+}
