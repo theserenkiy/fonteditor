@@ -58,16 +58,29 @@ export default {
 	}},
 	async created(){ 
 		//cl(JSON.stringify(env))
-		let d = await apiCall('readJSON',{path:`/${this.project}/fonts/${this.name}.json`});
+		let d;
+		try{
+			d = await apiCall('readJSON',{path:`/${this.project}/fonts/${this.name}.json`});
+		}catch(e)
+		{
+			cl(e,e[0])
+			if(e[0]=='api_err')
+			{
+				alert("API error: "+e[1])
+			}
+			return;
+		}
 		if(!d.glyphs)d.glyphs = [];
 		this.font = {
 			height: 8,
-			default_width: Math.round(this.font.height*0.75),
 			pixel_size: 12,
 			on_color: '#ff3300',
 			off_color: '#333333',
 			...d
 		};
+
+		if(!this.font.default_width)
+			this.font.default_width = Math.round(this.font.height*0.75)
 
 		for(let i of ['pixel_size','on_color','off_color'])
 			this[i] = this.font[i];

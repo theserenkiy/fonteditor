@@ -35,7 +35,7 @@ async function readFile(b){
 	cl('read',fullpath)
 	if(!fs.existsSync(fullpath))// || fs.lstatSync(fullpath).isDirectory())
 	{
-		throw `Cannot read file ${fullpath}: file not exists`;
+		throw `File not exists: ${fullpath}`;
 	}
 	else{
 		let body = fs.readFileSync(fullpath);

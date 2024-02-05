@@ -4,9 +4,13 @@ import express from 'express';
 import path from 'path';
 import api from './api.js';
 import {cl} from './server_lib.js';
+import fs from 'fs';
 const app = express();
 
 process.title = "FontEditor server (do not close!)";
+
+if(!fs.existsSync('./projects'))
+    fs.mkdirSync('./projects');
 
 app.use(express.static('static'))
 app.use(express.json())

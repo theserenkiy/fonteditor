@@ -34,8 +34,9 @@ export function initSettings(s)
 }
 
 
-export async function apiCall(cmd,params)
+export async function apiCall(cmd,params,silent=0)
 {
+	let d;
 	try{
 		let res = await fetch('/api/'+cmd,{
 			method:'POST',
@@ -44,15 +45,16 @@ export async function apiCall(cmd,params)
 			},
 			body: JSON.stringify(params)
 		});
-		let d = await res.json();
-		if(d.error)
-			throw d.error;
-		return d;
+		d = await res.json();
 
 	}catch(e){
 		alert('ОШИБКА во время обработки запроса: '+e+'\n\nПопробуйте перезапустить сервер');
-		throw e
+		throw ['network_err',e];
 	}
+
+	if(d.error)
+		throw ['api_err',d.error];
+	return d;
 }
 
 export async function p_alert(msg)

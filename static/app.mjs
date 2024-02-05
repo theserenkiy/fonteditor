@@ -30,7 +30,7 @@ export default {
 				// {name: 'ed_clips', title: 'Клипы'},
 				// {name: 'ed_settings', title: 'Настройки'}
 			],
-			tabs: {},
+			tabs: [],
 			cur_tab: '',
 			lpanel: {
 				projects: {title:'Проект',list:[]},
@@ -40,7 +40,8 @@ export default {
 				// settings: {title:'Настройки'},
 				// export: {title:'Экспорт'},
 			},
-			cur_project: ''
+			cur_project: '',
+			workspace: {}
 		}
 	},
 	mounted(){
@@ -56,12 +57,16 @@ export default {
 
 		await this.initProjectList()
 		
-		let ws = JSON.parse(localStorage.workspace || '{}');
-		for(let k of workspace_keys)
+		this.workspace = JSON.parse(localStorage.workspace || '{}');
+		if(this.workspace.cur_project)
 		{
-			if(ws[k])
-				this[k] = ws[k];
+			this.cur_project = this.workspace.cur_project;
 		}
+		// for(let k of workspace_keys)
+		// {
+		// 	if(ws[k])
+		// 		this[k] = ws[k];
+		// }
 		
 	},
 	watch:{
@@ -71,7 +76,7 @@ export default {
 
 			if(prev)
 			{
-				this.tabs = {};
+				this.tabs = [];
 				this.cur_tab = '';
 			}
 			let d = await apiCall('loadProject',{name});
@@ -79,9 +84,21 @@ export default {
 			this.lpanel.fonts.list = d.fonts;
 			//this.lpanel.objects.list = d.objects;
 			//this.lpanel.clips.list = d.clips;
+
+			//TODO tabs set for each project
+			if(this.workspace.cur_project == name)
+			{
+				this.tabs = this.workspace.tabs.filter(tab => d[tab.type].includes(tab.name));
+
+				if(this.workspace.cur_tab && this.tabs.find(t => t.tabid==this.workspace.cur_tab))
+					this.cur_tab = this.workspace.cur_tab;
+				else if(this.tabs.length)
+					this.cur_tab = this.tabs[0].tabid;
+
+				this.updSettings(d.settings);
+				this.env.cur_project = name;
+			}
 			
-			this.updSettings(d.settings);
-			this.env.cur_project = name;
 
 
 			this.debouncedSaveWS();
@@ -123,6 +140,16 @@ export default {
 		setTab(name){
 			this.cur_tab = name;
 		},
+
+		closeTab(tabid){
+			let ind = this.tabs.findIndex(t => t.tabid==tabid);
+			if(ind < 0)return;
+			if(this.tabs.length > 1)
+				this.cur_tab = (ind > 0 ? this.tabs[ind-1] : this.tabs[1]).tabid;
+			else this.cur_tab = null;
+			this.tabs = this.tabs.filter(t => t.tabid != tabid);
+		},
+
 		setProject(name){
 			this.cur_project = name;
 		},
@@ -145,14 +172,14 @@ export default {
 		openTab(what,name){
 			let tabid = this.cur_project+'/'+what+'/'+name;
 
-			if(!this.tabs[tabid])
+			if(!this.tabs.find(t => t.tabid==tabid))
 			{
-				this.tabs[tabid] = {
+				this.tabs.push({
 					tabid,
 					name,
 					type: what,
 					editor: 'ed_'+what
-				}
+				})
 			}
 			
 			this.cur_tab = tabid;
@@ -206,7 +233,7 @@ export default {
 		<div class=editor>
 			<div class=tabs>
 				<div class=tab v-for="tab in tabs" :key="tab.tabid">
-					<div class=title :class="{active:tab.tabid==cur_tab}" @click=setTab(tab.tabid)><b v-html="tab.name"></b></div>
+					<div class=title :class="{active:tab.tabid==cur_tab}" @click=setTab(tab.tabid)><b v-html="tab.name"></b><i class="icon-cancel" style="cursor:pointer" @click.stop="closeTab(tab.tabid)"></i></div>
 				</div>
 			</div>
 			<div class=editor_window>
