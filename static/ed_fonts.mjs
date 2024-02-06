@@ -349,7 +349,7 @@ export default {
 				@click="toggleAutoSimilars"
 			>
 			</button>
-			<button @click="font_export_opened=1">Export</button>
+			<!--button @click="font_export_opened=1">Export</button-->
 		</div>
 	
 		<div class="symlist">

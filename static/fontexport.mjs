@@ -5,15 +5,17 @@ export default {
     },
 	props: ['opened','font','name'],
 	data(){return{
-		visible: 1,
-		off: 0,
+		visible: 0,
+		off: 1,
 		descr: [{num: 0},{num: 1},{num: 2},{num: 3},{num: 4},{num: 5},{num:6},{num:7}]
 	}},
 	created()
 	{
-
 	},
 	watch:{
+		font(v){
+
+		},
 		opened(v){
 			cl('opened')
 			if(!v)this.close();
@@ -57,7 +59,7 @@ export default {
 							<option>64</option>
 						</select>
 					</label>
-					<label>Word order: 
+					<label>Word orientation: 
 						<select :value="font.export.order" @change="updParam('order',$event)">
 							<option>rows</option>
 							<option>cols</option>
@@ -82,7 +84,7 @@ export default {
 						<div v-for="word in descr" :class="font.export.direction">
 							<span>0</span>
 							<span v-html="word.num"></span>
-							<span v-html="font.export ? font.export.word_size : 'q'"></span>
+							<span v-html="font.export.word_size-1"></span>
 						</div>
 					</div>
 				</div>
