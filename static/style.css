@@ -286,3 +286,102 @@ body {
   color: #0f0;
   font-weight: bold;
 }
+.ed_fonts .fontexport {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000a;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.ed_fonts .fontexport.visible {
+  opacity: 1;
+}
+.ed_fonts .fontexport.off {
+  display: none;
+}
+.ed_fonts .fontexport .modal {
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  background-color: #222;
+}
+.ed_fonts .fontexport .modal h3 {
+  margin: 0.6em;
+  color: #aaa;
+}
+.ed_fonts .fontexport .modal .main {
+  display: flex;
+}
+.ed_fonts .fontexport .modal .main .controls {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.ed_fonts .fontexport .modal .main .controls label {
+  font-size: 1.2em;
+  margin: 0.2em;
+  display: flex;
+  justify-content: space-between;
+}
+.ed_fonts .fontexport .modal .main .controls label select {
+  font: inherit;
+  margin-left: 0.3em;
+}
+.ed_fonts .fontexport .modal .main .descr {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+}
+.ed_fonts .fontexport .modal .main .descr .win {
+  display: flex;
+  flex-wrap: wrap;
+}
+.ed_fonts .fontexport .modal .main .descr .win > div {
+  border: 2px solid #55d;
+  margin: 1px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ed_fonts .fontexport .modal .main .descr .win > div span:first-child,
+.ed_fonts .fontexport .modal .main .descr .win > div span:last-child {
+  color: #55d;
+}
+.ed_fonts .fontexport .modal .main .descr .win > div span:nth-child(2) {
+  font-size: 1.2em;
+}
+.ed_fonts .fontexport .modal .main .descr .win.order_rows {
+  width: 260px;
+  height: 100px;
+}
+.ed_fonts .fontexport .modal .main .descr .win.order_rows > div {
+  width: 128px;
+  height: 20px;
+}
+.ed_fonts .fontexport .modal .main .descr .win.order_rows > div.msb_lsb {
+  flex-direction: row-reverse;
+}
+.ed_fonts .fontexport .modal .main .descr .win.order_cols {
+  width: 100px;
+  height: 260px;
+}
+.ed_fonts .fontexport .modal .main .descr .win.order_cols > div {
+  width: 20px;
+  height: 128px;
+  flex-direction: column;
+}
+.ed_fonts .fontexport .modal .main .descr .win.order_cols > div.msb_lsb {
+  flex-direction: column-reverse;
+}
+.ed_fonts .fontexport .modal .main .descr .win.scan_cols_rows {
+  flex-direction: column;
+}
+.ed_fonts .fontexport .modal .main .descr .win.scan_rows_cols {
+  flex-direction: row;
+  align-items: flex-start;
+}

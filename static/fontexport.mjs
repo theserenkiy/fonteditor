@@ -1,83 +1,92 @@
-const cl = console.log;
-function exportColumn(img,x,y0,bits,lsb_top=1)
-{
-	let v = 0;
-	for(let y=0;y < bits;y++)
+const cl = console.log
+export default {
+    components:{
+        
+    },
+	props: ['opened','font','name'],
+	data(){return{
+		visible: 1,
+		off: 0,
+		descr: [{num: 0},{num: 1},{num: 2},{num: 3},{num: 4},{num: 5},{num:6},{num:7}]
+	}},
+	created()
 	{
-		if(!img[y0+y] || !img[y0+y][x])
-			continue;
-		v |= 1 << (lsb_top ? y : bits-1-y);
-	}
-	return v;
-}
 
-function makeColumnWordMap(img,w,h,bits,lsb_top)
-{
-	let rowcnt = Math.ceil(h/bits);
-	let wordmap = [];
-	for(let row=0;row < rowcnt;row++)
-	{
-		wordmap[row] = [];
-		for(let x=0; x < w; x++){
-			wordmap[row][x] = exportColumn(img,x,row*bits,bits,lsb_top)
+	},
+	watch:{
+		opened(v){
+			cl('opened')
+			if(!v)this.close();
+			else this.open();
 		}
-	}
-	return {data:wordmap,w,h:rowcnt};
-}
+	},
+	computed:{
+		rows(){
+			return this.descr[this.font.export.order];
+		}
+	},
+	methods:{
+		close(){
+			this.visible = 0;
+			setTimeout(()=>this.off=1,300);
+		},
 
-function scanWordmap(wordmap,order='h')
-{
-	let out = [wordmap.h*wordmap.w];
-	if(order=='h')
-	{
-		for(let y=0;y < wordmap.h;y++)
+		open(){
+			this.off=0;
+			setTimeout(()=>this.visible=1,10);
+		},
+
+		updParam(name,ev)
 		{
-			for(let x=0; x < wordmap.w; x++)
-				out.push(wordmap.data[y][x]);
+			let v = ev.target.value;
+			if(name=='word_size')v = +v;
+			this.font.export[name] = v;
+			this.$emit('change');
 		}
-	}
-	else
-	{
-		for(let x=0;x < wordmap.w;x++)
-		{
-			for(let y=0; y < wordmap.h; y++)
-				out.push(wordmap.data[y][x]);
-		}
-	}
-	return out;
-}
-
-export default function fontExport(font,prefix,lang='C',order='rows',align="left")
-{
-	let gnum = 1;
-
-	let symlist = [];
-	let symref = [];
-	let vars = {};
-	for(let gl of font.glyphs)
-	{
-		let gvarname = prefix+'_glyph_'+gnum;
-		for(let sym of gl.auto_symbols)
-		{
-			symlist.push('\''+sym+'\'');
-			symref.push(''+gvarname);
-		}
-		
-		let wmap = makeColumnWordMap(gl.image, gl.width, font.height, 8, 1);
-		//cl(wmap)
-		let glcode = scanWordmap(wmap,'h');
-
-		vars[gvarname] = ['uint8_t',glcode.length,glcode]//.map(v => v.toString(2).padStart(8,'0'))];
-		gnum++;
-	}
-	vars[prefix+'_symref'] = ['uint8_t *',symref.length,symref];
-	vars[prefix+'_symlist'] = ['uint8_t',symlist.length,symlist];
-
-	let code = '';
-	for(let varname in vars)
-	{
-		let v = vars[varname];
-		code += v[0]+' '+varname+'[] = {'+v[2].join(',')+'};\n';
-	}
-	return code;
+	},
+    template: `<div class="fontexport" :class="{visible:visible, off:off}" @click="$emit('close')">
+		<div class=modal @click.stop>
+			<h3>Export font</h3>
+			<div class=main>
+				<div class="controls">
+					<label>Word size: 
+						<select :value="font.export.word_size" @change="updParam('word_size',$event)">
+							<option>8</option>
+							<option>16</option>
+							<option>32</option>
+							<option>64</option>
+						</select>
+					</label>
+					<label>Word order: 
+						<select :value="font.export.order" @change="updParam('order',$event)">
+							<option>rows</option>
+							<option>cols</option>
+						</select>
+					</label>
+					<label>Word scan: 
+						<select :value="font.export.scan" @change="updParam('scan',$event)">
+							<option>rows_cols</option>
+							<option>cols_rows</option>
+						</select>
+					</label>
+					<label>Bit order: 
+						<select :value="font.export.direction" @change="updParam('direction',$event)">
+							<option value="msb_lsb">MSB to LSB</option>
+							<option value="lsb_msb">LSB to MSB</option>
+						</select>
+					</label>
+					
+				</div>
+				<div class=descr>
+					<div class=win :class="'scan_'+font.export.scan+' order_'+font.export.order">
+						<div v-for="word in descr" :class="font.export.direction">
+							<span>0</span>
+							<span v-html="word.num"></span>
+							<span v-html="font.export ? font.export.word_size : 'q'"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+    </div>`
 }

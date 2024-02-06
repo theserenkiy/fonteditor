@@ -3,7 +3,8 @@ import Glyph from './glyph.mjs';
 import { apiCall,cl, debounce, p_alert} from './lib.mjs';
 import env from './env.mjs';
 
-import fontExport from './fontexport.mjs';
+import fontExportLib from './fontexport_lib.mjs';
+import FontExport from './fontexport.mjs';
 
 const similars = {
 	en: 'AaBCcEeHKMOoPpTXx'.split(''),
@@ -40,7 +41,8 @@ for(let [i,c] of weights.entries())
 
 export default {
 	components: {
-		Glyph
+		Glyph,
+		FontExport
 	},
 	props: ['project','name'],
 	data(){return{
@@ -55,6 +57,7 @@ export default {
 		pixel_size: 12,
 		on_color: '#ff3300',
 		off_color: '#333333',
+		font_export_opened: 0
 	}},
 	async created(){ 
 		//cl(JSON.stringify(env))
@@ -82,6 +85,17 @@ export default {
 		if(!this.font.default_width)
 			this.font.default_width = Math.round(this.font.height*0.75)
 
+		if(!this.font.export)
+		{
+			this.font.export = {
+				word_size: 8,
+				order: 'cols',
+				direction: 'lsb_msb',
+				scan: 'rows_cols'
+			}
+		}
+			
+
 		for(let i of ['pixel_size','on_color','off_color'])
 			this[i] = this.font[i];
 
@@ -96,7 +110,7 @@ export default {
 				data: JSON.stringify(this.font,null,'	')
 			})
 
-			cl(fontExport(this.font,this.name))
+			cl(fontExportLib(this.font,this.name))
 			
 		},100)
 	},
@@ -274,6 +288,12 @@ export default {
 				p_alert('Найдены повторяющиеся символы: '+dups.join(', '))
 			
 			this.font.presented_symbols = list;
+		},
+
+		closeFontExport()
+		{
+			cl('CLOSE FE')
+			this.font_export_opened = 0;
 		}
 	},
 	template: `
@@ -329,6 +349,7 @@ export default {
 				@click="toggleAutoSimilars"
 			>
 			</button>
+			<button @click="font_export_opened=1">Export</button>
 		</div>
 	
 		<div class="symlist">
@@ -354,5 +375,12 @@ export default {
 				<div class="glyph addnew" @click="addnew([])"></div>
 			</div>
 		</div>
+		<FontExport 
+			:font="font" 
+			:name="name" 
+			:opened="font_export_opened" 
+			@close="closeFontExport" 
+			@change="save"
+		/>
 	</div>`
 }
