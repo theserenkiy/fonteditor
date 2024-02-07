@@ -369,7 +369,6 @@ export default {
 				<Glyph v-for="gl in c_glyphs" 
 					:gl="gl" 
 					:height="font.height"
-					
 					:key="gl.id"
 					@save="save" 
 					@delete="delGlyph"

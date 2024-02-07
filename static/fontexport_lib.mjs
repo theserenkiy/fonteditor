@@ -1,17 +1,34 @@
 const cl = console.log;
-function exportColumn(img,x,y0,bits,lsb_top=1)
+
+const ruSymTranslit = 'A,B,V,G,D,Ye,Yo,Zh,Z,I,Ikr,K,L,M,N,O,P,R,S,T,U,F,Kh,Ts,Ch,Sh,Shch,Hrd,Y,Sft,E,Yu,Ya'.split(',');
+
+
+function exportColumn(img,x,y0,bits,lsb_msb=1)
 {
 	let v = 0;
 	for(let y=0;y < bits;y++)
 	{
 		if(!img[y0+y] || !img[y0+y][x])
 			continue;
-		v |= 1 << (lsb_top ? y : bits-1-y);
+		v |= 1 << (lsb_msb ? y : bits-1-y);
 	}
 	return v;
 }
 
-function makeColumnWordMap(img,w,h,bits,lsb_top)
+function exportRow(img,y,x0,bits,lsb_msb=1)
+{
+	let v = (new Uint32Array(1))[0];
+	if(!img[y])
+		return v;
+	for(let x=0;x < bits;x++)
+	{
+		if(img[y][x0+x])	
+			v |= 1 << (lsb_msb ? y : bits-1-y);
+	}
+	return v;
+}
+
+function makeColumnWordMap(img,w,h,bits,lsb_msb)
 {
 	let rowcnt = Math.ceil(h/bits);
 	let wordmap = [];
@@ -19,16 +36,27 @@ function makeColumnWordMap(img,w,h,bits,lsb_top)
 	{
 		wordmap[row] = [];
 		for(let x=0; x < w; x++){
-			wordmap[row][x] = exportColumn(img,x,row*bits,bits,lsb_top)
+			wordmap[row][x] = exportColumn(img,x,row*bits,bits,lsb_msb)
 		}
 	}
 	return {data:wordmap,w,h:rowcnt};
 }
 
-function makeRowWordMap()
+function makeRowWordMap(img,w,h,bits,lsb_msb)
 {
+	let colcnt = Math.ceil(w/bits);
+	let wordmap = [];
 
+	for(let y=0; y < h; y++)
+	{
+		wordmap[y] = [];
+		for(let col=0;col < colcnt;col++){
+			wordmap[y][col] = exportRow(img,y,col*bits,bits,lsb_msb)
+		}
+	}
+	return {data:wordmap,w:colcnt,h};
 }
+
 
 function scanWordmap(wordmap,order='cols_rows')
 {
@@ -52,7 +80,7 @@ function scanWordmap(wordmap,order='cols_rows')
 	return out;
 }
 
-export default function fontExport(font,conf)
+export default function exportFont(font,conf)
 {
 	let gnum = 1;
 
@@ -61,7 +89,9 @@ export default function fontExport(font,conf)
 	let vars = {};
 	for(let gl of font.glyphs)
 	{
+		let glyphname = '';
 		let gvarname = conf.name+'_glyph_'+gnum;
+
 		for(let sym of gl.auto_symbols)
 		{
 			symlist.push('\''+sym+'\'');
@@ -85,7 +115,7 @@ export default function fontExport(font,conf)
 		if(formatter)
 			glcode = glcode.map(v => formatter[2]+v.toString(formatter[0]).padStart(formatter[1],'0'))
 
-		vars[gvarname] = ['uint8_t',glcode.length,glcode]//.map(v => v.toString(2).padStart(8,'0'))];
+		vars[gvarname] = ['uint'+conf.word_size+'_t',glcode.length,glcode]//.map(v => v.toString(2).padStart(8,'0'))];
 		gnum++;
 	}
 	vars[conf.name+'_symref'] = ['uint8_t *',symref.length,symref];

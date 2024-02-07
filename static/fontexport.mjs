@@ -20,7 +20,9 @@ export default {
 	},
 	watch:{
 		font(v){
-
+			if(!this.font.export)return;
+			if(!this.font.export.name)
+				this.font.export.name = this.name;
 		},
 		opened(v){
 			cl('opened')
@@ -40,7 +42,10 @@ export default {
 	methods:{
 		close(){
 			this.visible = 0;
-			setTimeout(()=>this.off=1,300);
+			setTimeout(()=>{
+				this.off=1;
+				this.export_code = ''
+			},300);
 		},
 
 		open(){
@@ -73,7 +78,6 @@ export default {
 							<option>8</option>
 							<option>16</option>
 							<option>32</option>
-							<option>64</option>
 						</select>
 					</label>
 					<label>Word orientation: 
