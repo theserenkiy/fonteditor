@@ -3,7 +3,7 @@ import Glyph from './glyph.mjs';
 import { apiCall,cl, debounce, p_alert} from './lib.mjs';
 import env from './env.mjs';
 
-import fontExportLib from './fontexport_lib.mjs';
+
 import FontExport from './fontexport.mjs';
 
 const similars = {
@@ -57,7 +57,7 @@ export default {
 		pixel_size: 12,
 		on_color: '#ff3300',
 		off_color: '#333333',
-		font_export_opened: 0
+		font_export_opened: 1
 	}},
 	async created(){ 
 		//cl(JSON.stringify(env))
@@ -89,9 +89,12 @@ export default {
 		{
 			this.font.export = {
 				word_size: 8,
-				order: 'cols',
-				direction: 'lsb_msb',
-				scan: 'rows_cols'
+				word_orient: 'cols',
+				bit_direction: 'lsb_msb',
+				scan: 'rows_cols',
+				lang: 'C',
+				format: 'DEC',
+				name: this.name
 			}
 		}
 			
@@ -110,7 +113,7 @@ export default {
 				data: JSON.stringify(this.font,null,'	')
 			})
 
-			cl(fontExportLib(this.font,this.name))
+			//cl(fontExportLib(this.font,this.name))
 			
 		},100)
 	},
@@ -297,16 +300,16 @@ export default {
 		}
 	},
 	template: `
-	<div class=ed_fonts>
+	<div class="ed_fonts" :class="name">
 		<component is="style">
-			.drawarea .row .pixel{
+			.ed_fonts.{{name}} .drawarea .row .pixel{
 				width: {{pixel_size}}px;
 				height: {{pixel_size}}px;
 			}
-			.drawarea .row .pixel::after{
+			.ed_fonts.{{name}} .drawarea .row .pixel::after{
 				background-color: {{off_color}}
 			}
-			.drawarea .row .pixel.active::after{
+			.ed_fonts.{{name}} .drawarea .row .pixel.active::after{
 				background-color: {{on_color}};
 				box-shadow: 0 0 10px {{on_color}};
 			}
@@ -349,7 +352,7 @@ export default {
 				@click="toggleAutoSimilars"
 			>
 			</button>
-			<!--button @click="font_export_opened=1">Export</button-->
+			<button class=auto @click="font_export_opened=1">Export</button>
 		</div>
 	
 		<div class="symlist">

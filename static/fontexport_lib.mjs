@@ -25,10 +25,15 @@ function makeColumnWordMap(img,w,h,bits,lsb_top)
 	return {data:wordmap,w,h:rowcnt};
 }
 
-function scanWordmap(wordmap,order='h')
+function makeRowWordMap()
+{
+
+}
+
+function scanWordmap(wordmap,order='cols_rows')
 {
 	let out = [wordmap.h*wordmap.w];
-	if(order=='h')
+	if(order=='rows_cols')
 	{
 		for(let y=0;y < wordmap.h;y++)
 		{
@@ -47,7 +52,7 @@ function scanWordmap(wordmap,order='h')
 	return out;
 }
 
-export default function fontExport(font,prefix,lang='C',order='rows',align="left")
+export default function fontExport(font,conf)
 {
 	let gnum = 1;
 
@@ -56,22 +61,35 @@ export default function fontExport(font,prefix,lang='C',order='rows',align="left
 	let vars = {};
 	for(let gl of font.glyphs)
 	{
-		let gvarname = prefix+'_glyph_'+gnum;
+		let gvarname = conf.name+'_glyph_'+gnum;
 		for(let sym of gl.auto_symbols)
 		{
 			symlist.push('\''+sym+'\'');
 			symref.push(''+gvarname);
 		}
 		
-		let wmap = makeColumnWordMap(gl.image, gl.width, font.height, 8, 1);
+		let wmap;
+		if(conf.word_orient=='cols')
+			wmap = makeColumnWordMap(gl.image, gl.width, font.height, conf.word_size, conf.bit_direction=='lsb_msb');
+		else
+			wmap = makeRowWordMap(gl.image, gl.width, font.height, conf.word_size, conf.bit_direction=='lsb_msb');
 		//cl(wmap)
-		let glcode = scanWordmap(wmap,'h');
+		let glcode = scanWordmap(wmap,conf.scan);
+
+		let formatter = {
+			'DEC': null,
+			'HEX': [16,conf.word_size/4,'0x'],
+			'BIN': [2,conf.word_size,'0b'],
+		}[conf.format];
+
+		if(formatter)
+			glcode = glcode.map(v => formatter[2]+v.toString(formatter[0]).padStart(formatter[1],'0'))
 
 		vars[gvarname] = ['uint8_t',glcode.length,glcode]//.map(v => v.toString(2).padStart(8,'0'))];
 		gnum++;
 	}
-	vars[prefix+'_symref'] = ['uint8_t *',symref.length,symref];
-	vars[prefix+'_symlist'] = ['uint8_t',symlist.length,symlist];
+	vars[conf.name+'_symref'] = ['uint8_t *',symref.length,symref];
+	vars[conf.name+'_symlist'] = ['uint8_t',symlist.length,symlist];
 
 	let code = '';
 	for(let varname in vars)

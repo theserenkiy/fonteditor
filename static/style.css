@@ -167,6 +167,9 @@ body {
   border: 1px solid #555;
   font-size: 20px;
 }
+.ed_fonts .controls button.auto {
+  width: auto;
+}
 .ed_fonts .controls .active {
   background-color: #533;
   border-color: #fff;
@@ -309,6 +312,9 @@ body {
   border: 1px solid #aaa;
   border-radius: 4px;
   background-color: #222;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 .ed_fonts .fontexport .modal h3 {
   margin: 0.6em;
@@ -321,70 +327,88 @@ body {
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  min-width: 300px;
 }
 .ed_fonts .fontexport .modal .main .controls label {
   font-size: 1.2em;
   margin: 0.2em;
   display: flex;
   justify-content: space-between;
+  border-bottom: 1px solid #fff3;
+  padding: 0 0 4px 0;
 }
 .ed_fonts .fontexport .modal .main .controls label select {
   font: inherit;
   margin-left: 0.3em;
 }
 .ed_fonts .fontexport .modal .main .descr {
-  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.ed_fonts .fontexport .modal .main .descr h4 {
+  margin: 0 0 10px 0;
+}
+.ed_fonts .fontexport .modal .main .descr .model_area {
   display: flex;
   justify-content: center;
-  align-items: center;
   width: 300px;
   height: 300px;
 }
-.ed_fonts .fontexport .modal .main .descr .win {
+.ed_fonts .fontexport .modal .main .descr .model_area .model {
   display: flex;
   flex-wrap: wrap;
 }
-.ed_fonts .fontexport .modal .main .descr .win > div {
+.ed_fonts .fontexport .modal .main .descr .model_area .model > div {
   border: 2px solid #55d;
   margin: 1px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.ed_fonts .fontexport .modal .main .descr .win > div span:first-child,
-.ed_fonts .fontexport .modal .main .descr .win > div span:last-child {
+.ed_fonts .fontexport .modal .main .descr .model_area .model > div span:first-child,
+.ed_fonts .fontexport .modal .main .descr .model_area .model > div span:last-child {
   color: #55d;
 }
-.ed_fonts .fontexport .modal .main .descr .win > div span:nth-child(2) {
+.ed_fonts .fontexport .modal .main .descr .model_area .model > div span:nth-child(2) {
   font-size: 1.2em;
 }
-.ed_fonts .fontexport .modal .main .descr .win.order_rows {
-  width: 260px;
-  height: 100px;
+.ed_fonts .fontexport .modal .main .descr .model_area .model.orient_rows {
+  width: 261px;
+  height: 110px;
 }
-.ed_fonts .fontexport .modal .main .descr .win.order_rows > div {
+.ed_fonts .fontexport .modal .main .descr .model_area .model.orient_rows > div {
   width: 128px;
-  height: 20px;
+  height: 25px;
 }
-.ed_fonts .fontexport .modal .main .descr .win.order_rows > div.msb_lsb {
+.ed_fonts .fontexport .modal .main .descr .model_area .model.orient_rows > div.msb_lsb {
   flex-direction: row-reverse;
 }
-.ed_fonts .fontexport .modal .main .descr .win.order_cols {
-  width: 100px;
-  height: 260px;
+.ed_fonts .fontexport .modal .main .descr .model_area .model.orient_cols {
+  width: 110px;
+  height: 261px;
 }
-.ed_fonts .fontexport .modal .main .descr .win.order_cols > div {
-  width: 20px;
+.ed_fonts .fontexport .modal .main .descr .model_area .model.orient_cols > div {
+  width: 25px;
   height: 128px;
   flex-direction: column;
 }
-.ed_fonts .fontexport .modal .main .descr .win.order_cols > div.msb_lsb {
+.ed_fonts .fontexport .modal .main .descr .model_area .model.orient_cols > div.msb_lsb {
   flex-direction: column-reverse;
 }
-.ed_fonts .fontexport .modal .main .descr .win.scan_cols_rows {
+.ed_fonts .fontexport .modal .main .descr .model_area .model.scan_cols_rows {
   flex-direction: column;
 }
-.ed_fonts .fontexport .modal .main .descr .win.scan_rows_cols {
+.ed_fonts .fontexport .modal .main .descr .model_area .model.scan_rows_cols {
   flex-direction: row;
   align-items: flex-start;
+}
+.ed_fonts .fontexport .modal .export {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 10px;
+}
+.ed_fonts .fontexport .modal .export textarea {
+  height: 300px;
 }
