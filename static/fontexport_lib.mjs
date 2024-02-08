@@ -2,6 +2,16 @@ const cl = console.log;
 
 const ruSymTranslit = 'A,B,V,G,D,Ye,Yo,Zh,Z,I,Ikr,K,L,M,N,O,P,R,S,T,U,F,Kh,Ts,Ch,Sh,Shch,Hrd,Y,Sft,E,Yu,Ya'.split(',');
 
+function getUTFCode(char)
+{
+	var charcode = (new )
+	if(charcode < 0x80)
+		return charcode;
+	else if (charcode < 0x800) {
+		return ((0xc0 | (charcode >> 6)) << 8) | 0x80 | (charcode & 0x3f);
+	}
+	else return 0;
+}
 
 function exportColumn(img,x,y0,total_length,bits,lsb_msb=1)
 {
