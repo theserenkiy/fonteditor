@@ -3,11 +3,13 @@ const cl = console.log;
 const ruSymTranslit = 'A,B,V,G,D,Ye,Yo,Zh,Z,I,Ikr,K,L,M,N,O,P,R,S,T,U,F,Kh,Ts,Ch,Sh,Shch,Hrd,Y,Sft,E,Yu,Ya'.split(',');
 
 
-function exportColumn(img,x,y0,bits,lsb_msb=1)
+function exportColumn(img,x,y0,total_length,bits,lsb_msb=1)
 {
 	let v = 0;
 	for(let y=0;y < bits;y++)
 	{
+		if(y0+y+1 > total_length)
+			break;
 		if(!img[y0+y] || !img[y0+y][x])
 			continue;
 		v |= 1 << (lsb_msb ? y : bits-1-y);
@@ -15,15 +17,17 @@ function exportColumn(img,x,y0,bits,lsb_msb=1)
 	return v;
 }
 
-function exportRow(img,y,x0,bits,lsb_msb=1)
+function exportRow(img,y,x0,total_length,bits,lsb_msb=1)
 {
 	let v = (new Uint32Array(1))[0];
 	if(!img[y])
 		return v;
 	for(let x=0;x < bits;x++)
 	{
+		if(x0+x+1 > total_length)
+			break;
 		if(img[y][x0+x])	
-			v |= 1 << (lsb_msb ? y : bits-1-y);
+			v |= 1 << (lsb_msb ? x : bits-1-x);
 	}
 	return v;
 }
@@ -36,7 +40,7 @@ function makeColumnWordMap(img,w,h,bits,lsb_msb)
 	{
 		wordmap[row] = [];
 		for(let x=0; x < w; x++){
-			wordmap[row][x] = exportColumn(img,x,row*bits,bits,lsb_msb)
+			wordmap[row][x] = exportColumn(img,x,row*bits,h,bits,lsb_msb)
 		}
 	}
 	return {data:wordmap,w,h:rowcnt};
@@ -51,7 +55,7 @@ function makeRowWordMap(img,w,h,bits,lsb_msb)
 	{
 		wordmap[y] = [];
 		for(let col=0;col < colcnt;col++){
-			wordmap[y][col] = exportRow(img,y,col*bits,bits,lsb_msb)
+			wordmap[y][col] = exportRow(img,y,col*bits,w,bits,lsb_msb)
 		}
 	}
 	return {data:wordmap,w:colcnt,h};
