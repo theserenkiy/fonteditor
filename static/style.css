@@ -403,6 +403,14 @@ body {
   flex-direction: row;
   align-items: flex-start;
 }
+.ed_fonts .fontexport .modal .button {
+  display: flex;
+  justify-content: center;
+}
+.ed_fonts .fontexport .modal .button button {
+  font-size: 1.2em;
+  padding: 0.3em 0.5em;
+}
 .ed_fonts .fontexport .modal .export {
   display: flex;
   flex-direction: column;
