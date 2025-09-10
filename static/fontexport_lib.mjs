@@ -64,7 +64,7 @@ function makeRowWordMap(img,w,h,bits,lsb_msb)
 
 function scanWordmap(wordmap,order='cols_rows')
 {
-	let out = [wordmap.h*wordmap.w];
+	let out = [];
 	if(order=='rows_cols')
 	{
 		for(let y=0;y < wordmap.h;y++)
@@ -84,13 +84,19 @@ function scanWordmap(wordmap,order='cols_rows')
 	return out;
 }
 
+
+
 export default function exportFont(font,conf)
 {
+	cl(conf)
 	let gnum = 1;
 
 	let symlist = [];
 	let symref = [];
+	let symref_py = {};
 	let vars = {};
+	let codes_py = []
+	let num = 0;
 	for(let gl of font.glyphs)
 	{
 		let glyphname = '';
@@ -100,6 +106,7 @@ export default function exportFont(font,conf)
 		{
 			symlist.push('\''+sym+'\'');
 			symref.push(''+gvarname);
+			symref_py[sym] = gnum-1
 		}
 		
 		let wmap;
@@ -120,16 +127,30 @@ export default function exportFont(font,conf)
 			glcode = glcode.map(v => formatter[2]+v.toString(formatter[0]).padStart(formatter[1],'0'))
 
 		vars[gvarname] = ['uint'+conf.word_size+'_t',glcode.length,glcode]//.map(v => v.toString(2).padStart(8,'0'))];
+		codes_py.push(`(${gl.width},(${glcode.join(",")}))`)
 		gnum++;
 	}
 	vars[conf.name+'_symref'] = ['uint8_t *',symref.length,symref];
 	vars[conf.name+'_symlist'] = ['uint8_t',symlist.length,symlist];
 
 	let code = '';
-	for(let varname in vars)
+
+	if(conf.lang == "C")
 	{
-		let v = vars[varname];
-		code += v[0]+' '+varname+'[] = {'+v[2].join(',')+'};\n';
+		for(let varname in vars)
+		{
+			let v = vars[varname];
+			code += v[0]+' '+varname+'[] = {'+v[2].join(',')+'};\n';
+		}
 	}
+	else if(conf.lang == "PYTHON")
+	{
+		code += `FONT_${conf.name} = {
+	"height": ${font.height},
+	"glyphs": ${codes_py.join(",\n")},
+	"refs": ${JSON.stringify(symref_py)}
+}`
+	}
+	
 	return code;
 }

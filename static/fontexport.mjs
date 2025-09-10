@@ -75,6 +75,7 @@ export default {
 				<div class="controls">
 					<label>Word size: 
 						<select :value="fontdata.word_size" @change="updParam('word_size',$event)">
+							<option>1</option>
 							<option>8</option>
 							<option>16</option>
 							<option>32</option>
@@ -102,7 +103,7 @@ export default {
 					<label>Language: 
 						<select :value="fontdata.lang" @change="updParam('lang',$event)">
 							<option>C</option>
-							<option>ASM</option>
+							<option>PYTHON</option>
 						</select>
 					</label>
 

@@ -310,6 +310,7 @@ body {
 }
 .ed_fonts .fontexport .modal {
   border: 1px solid #aaa;
+  width: 1000px;
   border-radius: 4px;
   background-color: #222;
   display: flex;

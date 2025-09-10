@@ -15,7 +15,7 @@ const letters = {
 	ru: 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ',
 	en: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
 	digits: '0123456789',
-	symbols: '.,-;!?\'"()<>+/*%^_@#$&'
+	symbols: '.,-;:!?\'"()<>+/*%^_@#$&'
 }
 
 //calculate letter weights
