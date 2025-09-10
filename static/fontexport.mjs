@@ -100,18 +100,26 @@ export default {
 						</select>
 					</label>
 
-					<label>Language: 
-						<select :value="fontdata.lang" @change="updParam('lang',$event)">
-							<option>C</option>
-							<option>PYTHON</option>
-						</select>
-					</label>
-
 					<label>Numerical format: 
 						<select :value="fontdata.format" @change="updParam('format',$event)">
 							<option>DEC</option>
 							<option>HEX</option>
 							<option>BIN</option>
+						</select>
+					</label>
+
+					<label>Encoding: 
+						<select :value="fontdata.encoding" @change="updParam('encoding',$event)">
+							<option value=utf8>UTF-8</option>
+							<option value=cp1251>ASCII WIN-1251</option>
+						</select>
+					</label>
+
+					<label>Language: 
+						<select :value="fontdata.lang" @change="updParam('lang',$event)">
+							<option>C</option>
+							<option>ASM</option>
+							<option>PYTHON</option>
 						</select>
 					</label>
 					
@@ -129,7 +137,9 @@ export default {
 					</div>
 				</div>
 			</div>
-			<button @click="doExport">Export!</button>
+			<div class=button>
+				<button @click="doExport">Export!</button>
+			</div>
 			<div class=export>
 				<textarea :value=export_code></textarea>
 			</div>

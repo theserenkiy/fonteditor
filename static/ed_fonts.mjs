@@ -57,7 +57,7 @@ export default {
 		pixel_size: 12,
 		on_color: '#ff3300',
 		off_color: '#333333',
-		font_export_opened: 1
+		font_export_opened: 0
 	}},
 	async created(){ 
 		//cl(JSON.stringify(env))
@@ -86,18 +86,18 @@ export default {
 			this.font.default_width = Math.round(this.font.height*0.75)
 
 		if(!this.font.export)
-		{
-			this.font.export = {
-				word_size: 8,
-				word_orient: 'cols',
-				bit_direction: 'lsb_msb',
-				scan: 'rows_cols',
-				lang: 'C',
-				format: 'DEC',
-				name: this.name
-			}
-		}
-			
+			this.font.export = {}
+
+		this.font.export = {word_size: 8,
+			word_orient: 'cols',
+			bit_direction: 'lsb_msb',
+			scan: 'rows_cols',
+			lang: 'C',
+			format: 'DEC',
+			name: this.name,
+			encoding: 'utf8',
+			...this.font.export
+		}			
 
 		for(let i of ['pixel_size','on_color','off_color'])
 			this[i] = this.font[i];
